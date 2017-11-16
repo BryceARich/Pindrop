@@ -120,14 +120,15 @@ class BasicTests(unittest.TestCase):
         half_entries = data.PhoneDataLayer().get_entries(len(all_entries)/2)
         self.assertEquals(len(all_entries)/2, len(half_entries))
 
+        for i in range(len(half_entries)): #check that the first half of entries were pulled in the same order
+            self.assertTrue(all_entries[i] == half_entries[i])
+
     def test_insert_entries(self):
         phone_data = data.PhoneDataLayer()
         all_entries = phone_data.get_entries()
         #phone_data.insert_entries(all_entries)
         self.maxDiff = None
         all_db = phone_data.get_db_entries(len(all_entries));
-        all_entries.sort()
-        all_db.sort()
         for i in range(len(all_entries)):
             self.assertTrue(all_entries[i] == all_db[i])
 

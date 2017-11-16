@@ -13,10 +13,10 @@ class PhoneNumberEntry:
         else :
             self.area_code  = phone_number[1:4]
         self.phone_number = phone_number
-        if(type(report_count) == unicode):
-            comment = comment[:-21]
-        self.report_count = int(report_count) #cast to integer so that the database type is the same as the web scraped type
-        self.comment      = comment.replace('"', '\\"') # remove unnecesary kdxyiun2 6s,so,ltz,fz at the end of each string TODO figure out why this is showing up to find a better long term
+        if(type(report_count) == unicode): # probably a better way to indicate if it is a reading from a web scrape or from the database
+            comment = comment[:-21]# remove unnecesary kdxyiun2 6s,so,ltz,fz at the end of each string TODO figure out why this is showing up to find a better long term
+        self.report_count = int(report_count) #cast to integer so that the database type is the same as the web scraped type this way the __eq__ function works
+        self.comment      = comment.replace('"', '\\"') 
 
     def __unicode__(self):
         skeleton = u'{{ "area_code": "{}", "phone_number": "{}", "report_count": "{}", "comment": "{}" }}'
@@ -28,12 +28,9 @@ class PhoneNumberEntry:
     def __repr__(self):
         return unicode(self).encode('utf-8')
 
+    #added for comparison of Phone Number Entry classes to ensure database stores the same data as what was webscraped
     def __eq__(self,other):
         if isinstance(self,other.__class__):
-            print "\n\n\n\n\n\n\n\n\n\n\n\n\n"
-            print self.comment
-            print other.comment
-            print "\n\n\n\n\n\n\n\n\n\n\n\n\n"
             return (self.__dict__ == other.__dict__)
         else:
             return False
