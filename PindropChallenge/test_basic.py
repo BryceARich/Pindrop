@@ -82,7 +82,7 @@ class BasicTests(unittest.TestCase):
             assert match is not None
             self.assertEquals(len(match.groups()),3)
 
-    # check that number of comments is a number
+    # check that number of comments is a valid number
     def test_number_of_comments(self):
         response = app.get_results(1)
         fetched = json.loads(response)
@@ -90,7 +90,7 @@ class BasicTests(unittest.TestCase):
         match = re.match("([\d])+$",report_count)
         assert match is not None
 
-    # check that all numbers of comments are numbers
+    # check that all numbers of comments are valid numbers
     def test_all_number_of_comments(self):
         response = app.get_results()
         fetched = json.loads(response)
@@ -98,9 +98,21 @@ class BasicTests(unittest.TestCase):
             report_count = f.get("report_count")
             match = re.match("([\d])+$",report_count)
             assert match is not None
-            print report_count
 
-    
+    #make sure that the comment field exists
+    def test_comment(self):
+        response = app.get_results(1)
+        fetched = json.loads(response)
+        comment = fetched[0].get("comment")
+        self.assertTrue(len(comment) > 0)
+
+    #make sure that the comment field exists for all
+    def test_all_comments(self):
+        response = app.get_results()
+        fetched = json.loads(response)
+        for f in fetched:
+            comment = f.get("comment")
+            self.assertTrue(len(comment) > 0)
 
 
 if __name__ == "__main__":

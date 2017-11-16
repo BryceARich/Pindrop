@@ -14,7 +14,7 @@ class PhoneNumberEntry:
             self.area_code  = phone_number[1:4]
         self.phone_number = phone_number
         self.report_count = report_count
-        self.comment      = comment.replace('"', '\\"')
+        self.comment      = comment[:-21].replace('"', '\\"') # remove unnecesary kdxyiun2 6s,so,ltz,fz at the end of each string TODO: figure out why this is showing up to find a better long term fix
 
     def __unicode__(self):
         skeleton = u'{{ "area_code": "{}", "phone_number": "{}", "report_count": "{}", "comment": "{}" }}'
