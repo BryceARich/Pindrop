@@ -114,6 +114,24 @@ class BasicTests(unittest.TestCase):
             comment = f.get("comment")
             self.assertTrue(len(comment) > 0)
 
+    #test to ensure that get entries correctly limits the number of entries fetched when providing input
+    def test_get_entries(self):
+        all_entries = data.PhoneDataLayer().get_entries()
+        half_entries = data.PhoneDataLayer().get_entries(len(all_entries)/2)
+        self.assertEquals(len(all_entries)/2, len(half_entries))
+
+    def test_insert_entries(self):
+        phone_data = data.PhoneDataLayer()
+        all_entries = phone_data.get_entries()
+        #phone_data.insert_entries(all_entries)
+        self.maxDiff = None
+        all_db = phone_data.get_db_entries(len(all_entries));
+        all_entries.sort()
+        all_db.sort()
+        for i in range(len(all_entries)):
+            self.assertTrue(all_entries[i] == all_db[i])
+
+
 
 if __name__ == "__main__":
     unittest.main()

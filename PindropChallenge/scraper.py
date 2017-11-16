@@ -13,8 +13,10 @@ class PhoneNumberEntry:
         else :
             self.area_code  = phone_number[1:4]
         self.phone_number = phone_number
-        self.report_count = report_count
-        self.comment      = comment[:-21].replace('"', '\\"') # remove unnecesary kdxyiun2 6s,so,ltz,fz at the end of each string TODO figure out why this is showing up to find a better long term
+        if(type(report_count) == unicode):
+            comment = comment[:-21]
+        self.report_count = int(report_count) #cast to integer so that the database type is the same as the web scraped type
+        self.comment      = comment.replace('"', '\\"') # remove unnecesary kdxyiun2 6s,so,ltz,fz at the end of each string TODO figure out why this is showing up to find a better long term
 
     def __unicode__(self):
         skeleton = u'{{ "area_code": "{}", "phone_number": "{}", "report_count": "{}", "comment": "{}" }}'
@@ -25,6 +27,17 @@ class PhoneNumberEntry:
 
     def __repr__(self):
         return unicode(self).encode('utf-8')
+
+    def __eq__(self,other):
+        if isinstance(self,other.__class__):
+            print "\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            print self.comment
+            print other.comment
+            print "\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            return (self.__dict__ == other.__dict__)
+        else:
+            return False
+
 
 class Parser:
     def __init__(self, html):
